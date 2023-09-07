@@ -89,8 +89,7 @@ DATABASES = {
         #'PASSWORD': 'Mariana0816*',
         'USER': 'dbadmin',
         'PASSWORD': 'uniandesIOT1234*',
-        #'HOST': '44.200.10.21',#Postgres
-        'HOST': '35.170.79.109',#35.170.79.109 # 44.200.10.21
+        'HOST': '44.214.105.4',
         'PORT': '',
     }
 }
