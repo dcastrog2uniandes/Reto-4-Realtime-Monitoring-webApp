@@ -747,6 +747,12 @@ def get_daterange(request):
     return start, end
 
 
+def reto(request):
+
+    return JsonResponse({"ok":True})
+
+
+
 """
 Filtro para formatear datos en el template de index
 """
