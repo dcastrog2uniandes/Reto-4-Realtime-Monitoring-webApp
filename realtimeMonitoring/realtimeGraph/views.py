@@ -650,6 +650,45 @@ def get_daterange(request):
     return start, end
 
 
+def query_reto(request):
+
+    measurement = Data.objects.values('measurement__name')\
+            .annotate(total_registers=Count('measurement__name'),\
+                    min_value=Min('value'),\
+                    max_value=Max('value'),\
+                    average=Avg('value'))\
+            .values('measurement__name','min_value','max_value','average','total_registers')
+    
+    for m in measurement:
+    
+        by_user = Data.objects.filter(measurement__name=m['measurement__name'])\
+                .values('station__user__login')\
+                .annotate(total_registers=Count('station__user__login'),\
+                        min_value=Min('value'),\
+                        max_value=Max('value'),\
+                        average=Avg('value'))\
+                .values('station__user__login','min_value','max_value','average','total_registers')
+        
+        by_location = Data.objects.filter(measurement__name=m['measurement__name'])\
+                .values('station__location__city__name')\
+                .annotate(total_registers=Count('station__location__city__name'),\
+                        min_value=Min('value'),\
+                        max_value=Max('value'),\
+                        average=Avg('value'))\
+                .values('station__location__city__name','min_value','max_value','average','total_registers')
+        
+        m['by_user'] =  list(by_user)
+        m['by_location'] =  list(by_location)
+
+    data = {
+        'Reto': "Capa de Datos",
+        'Grupo': 'Equipo 13 - Pareja 1',
+        "query_interesante":list(measurement)
+    }
+    return JsonResponse(data)
+
+
+
 '''
 Filtro para formatear datos en el template de index
 '''
