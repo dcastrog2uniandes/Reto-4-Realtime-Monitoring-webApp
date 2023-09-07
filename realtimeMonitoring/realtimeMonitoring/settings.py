@@ -89,7 +89,7 @@ DATABASES = {
         #'PASSWORD': 'Mariana0816*',
         'USER': 'dbadmin',
         'PASSWORD': 'uniandesIOT1234*',
-        'HOST': '44.214.105.4',
+        'HOST': '35.168.58.54',
         'PORT': '',
     }
 }
