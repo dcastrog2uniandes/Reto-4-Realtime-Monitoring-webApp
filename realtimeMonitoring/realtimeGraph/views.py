@@ -653,7 +653,7 @@ def get_daterange(request):
 def query_reto(request):
 
     data = Data.objects.values('measurement__name')\
-            .annotate(total_registers=Count('measurement__name'),\
+            .annotate(total_registers=Count('value'),\
                     min_value=Min('value'),\
                     max_value=Max('value'),\
                     average=Avg('value'))\
@@ -663,7 +663,7 @@ def query_reto(request):
     
         by_user = Data.objects.filter(measurement__name=m['measurement__name'])\
                 .values('station__user__login')\
-                .annotate(total_registers=Count('station__user__login'),\
+                .annotate(total_registers=Count('value'),\
                         min_value=Min('value'),\
                         max_value=Max('value'),\
                         average=Avg('value'))\
@@ -671,7 +671,7 @@ def query_reto(request):
         
         by_location = Data.objects.filter(measurement__name=m['measurement__name'])\
                 .values('station__location__city__name')\
-                .annotate(total_registers=Count('station__location__city__name'),\
+                .annotate(total_registers=Count('value'),\
                         min_value=Min('value'),\
                         max_value=Max('value'),\
                         average=Avg('value'))\
