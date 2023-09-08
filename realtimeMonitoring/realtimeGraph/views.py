@@ -38,7 +38,7 @@ from .models import (
 )
 from realtimeMonitoring import settings
 import dateutil.relativedelta
-from django.db.models import Avg, Max, Min, Sum
+from django.db.models import Avg, Max, Min, Sum, Count
 
 
 class DashboardView(TemplateView):
@@ -747,9 +747,43 @@ def get_daterange(request):
     return start, end
 
 
-def reto(request):
+def query_reto(request):
 
-    return JsonResponse({"ok":True})
+    data = Data.objects.values('measurement__name')\
+            .annotate(total_registers=Sum('length'),
+                    min_value=Min('min_value'),\
+                    max_value=Max('max_value'),\
+                    average=Avg('avg_value'))\
+            .values('measurement__name','total_registers','min_value','max_value','average')
+
+    for m in data:
+        by_user = Data.objects.filter(measurement__name=m['measurement__name'])\
+            .values('station__user__login')\
+            .annotate(total_registers=Sum('length'),\
+                      min_value=Min('min_value'),
+                      max_value=Max('max_value'),
+                      average=Avg('avg_value'))\
+            .values('station__user__login','min_value','max_value','average','total_registers')
+        
+        by_location = Data.objects.filter(measurement__name=m['measurement__name'])\
+            .values('station__location__city__name')\
+            .annotate(total_registers=Sum('length'),\
+                      min_value=Min('min_value'),
+                      max_value=Max('max_value'),
+                      average=Avg('avg_value'))\
+            .values('station__location__city__name','min_value','max_value','average','total_registers')
+        
+        m['by_user'] = list(by_user)
+        m['by_location'] = list(by_location)   
+    
+    response = {
+        'challenge': "Capa de Datos",
+        'group': "Equipo 13 - Pareja 1",
+        'app': "Timesacale",
+        'interesting_query': list(data)
+    }
+
+    return JsonResponse(response)
 
 
 

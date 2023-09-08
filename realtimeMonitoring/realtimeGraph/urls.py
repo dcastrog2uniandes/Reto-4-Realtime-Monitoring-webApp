@@ -13,5 +13,5 @@ urlpatterns = [
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("historical/data", download_csv_data, name="historical-data"),
-    path("reto_capa_datos/", reto, name="reto"),
+    path("reto_capa_datos/", query_reto, name="reto_capa_datos"),
 ]
