@@ -652,14 +652,14 @@ def get_daterange(request):
 
 def query_reto(request):
 
-    measurement = Data.objects.values('measurement__name')\
+    data = Data.objects.values('measurement__name')\
             .annotate(total_registers=Count('measurement__name'),\
                     min_value=Min('value'),\
                     max_value=Max('value'),\
                     average=Avg('value'))\
             .values('measurement__name','min_value','max_value','average','total_registers')
     
-    for m in measurement:
+    for m in data:
     
         by_user = Data.objects.filter(measurement__name=m['measurement__name'])\
                 .values('station__user__login')\
@@ -681,9 +681,10 @@ def query_reto(request):
         m['by_location'] =  list(by_location)
 
     data = {
-        'Reto': "Capa de Datos",
-        'Grupo': 'Equipo 13 - Pareja 1',
-        "query_interesante":list(measurement)
+        'challenge': "Capa de Datos",
+        'group': 'Equipo 13 - Pareja 1',
+        'app':'Postgre',
+        "interesting_query":list(data)
     }
     return JsonResponse(data)
 

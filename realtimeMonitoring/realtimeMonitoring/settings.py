@@ -85,11 +85,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'iot_data',
-        #'USER': 'postgres',
-        #'PASSWORD': 'Mariana0816*',
         'USER': 'dbadmin',
         'PASSWORD': 'uniandesIOT1234*',
-        'HOST': '35.168.58.54',
+        'HOST': 'localhost',
         'PORT': '',
     }
 }
